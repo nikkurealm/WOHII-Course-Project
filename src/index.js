@@ -3,16 +3,16 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const questionsRouter = require("./routes/questions");
+
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.json({ message: 'Hello, World!' });
+app.use("/api/questions", questionsRouter);
+
+app.use((req, res) => {
+    res.json({ msg: "Not Found" });
 });
 
-
-app.get('/health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
 
 
 app.listen(PORT, () => {
