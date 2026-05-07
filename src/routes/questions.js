@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const prisma = require("../lib/prisma");
+const authenticate = require("../middleware/auth");
+const isOwner = require("../middleware/isOwner");
 
+router.use(authenticate)
 
 function formatQuestion(question) {
     return {
@@ -65,7 +68,7 @@ router.post("/", async (req, res) => {
 
     const newQuestion = await prisma.question.create({
         data: {
-            question, answer,
+            question, answer, userId: req.user.userId,
             keywords: {
                 connectOrCreate: keywordsArray.map((kw) => ({
                     where: { name: kw }, create: {name: kw },
